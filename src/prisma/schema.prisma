@@ -1,0 +1,37 @@
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  games     Game[]
+  scores    Score[]
+}
+
+model Game {
+  id         Int      @id @default(autoincrement())
+  pin        String   @unique
+  courseName String
+  date       DateTime @default(now())
+  players    User[]
+  scores     Score[]
+}
+
+model Score {
+  id     Int  @id @default(autoincrement())
+  value  Int
+  hole   Int
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  game   Game @relation(fields: [gameId], references: [id])
+  gameId Int
+}
