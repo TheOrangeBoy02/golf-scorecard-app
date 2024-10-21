@@ -1,47 +1,44 @@
 // src/components/Scorecard.tsx
-import React, { useState, useEffect } from 'react'
-import useSWR from 'swr'
-import { Score } from '../types/score'
+import React from 'react'
+import { Score, Game } from '../types'
 
 interface ScorecardProps {
-  gameId: string
+  game: Game
+  scores: Score[]
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
-
-const Scorecard: React.FC<ScorecardProps> = ({ gameId }) => {
-  const { data: scores, error } = useSWR<Score[]>(`/api/score/${gameId}`, fetcher, {
-    refreshInterval: 5000
-  })
-
-  if (error) return <div>Failed to load scores</div>
-  if (!scores) return <div>Loading...</div>
+const Scorecard: React.FC<ScorecardProps> = ({ game, scores }) => {
+  const holeNumbers = Array.from({ length: game.holeCount }, (_, i) => i + 1)
 
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">Scorecard</h2>
-      <table className="w-full">
-        <thead>
+    <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
           <tr>
-            <th className="text-left">Player</th>
-            <th className="text-left">Hole 1</th>
-            <th className="text-left">Hole 2</th>
-            <th className="text-left">Hole 3</th>
-            <th className="text-left">Hole 4</th>
-            <th className="text-left">Hole 5</th>
-            <th className="text-left">Total</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player</th>
+            {holeNumbers.map(hole => (
+              <th key={hole} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Hole {hole}
+              </th>
+            ))}
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
           </tr>
         </thead>
-        <tbody>
-          {scores.map((score) => (
-            <tr key={score.id}>
-              <td>{score.user.name}</td>
-              <td>{score.hole === 1 ? score.value : '-'}</td>
-              <td>{score.hole === 2 ? score.value : '-'}</td>
-              <td>{score.hole === 3 ? score.value : '-'}</td>
-              <td>{score.hole === 4 ? score.value : '-'}</td>
-              <td>{score.hole === 5 ? score.value : '-'}</td>
-              <td>{score.value}</td>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {game.players?.map((player) => (
+            <tr key={player.id}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{player.name}</td>
+              {holeNumbers.map(hole => {
+                const score = scores.find(s => s.userId === player.id && s.hole === hole)
+                return (
+                  <td key={hole} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {score ? score.value : '-'}
+                  </td>
+                )
+              })}
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-600">
+                {scores.filter(s => s.userId === player.id).reduce((sum, s) => sum + s.value, 0)}
+              </td>
             </tr>
           ))}
         </tbody>

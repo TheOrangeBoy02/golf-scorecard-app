@@ -21,6 +21,7 @@ model Game {
   id         Int      @id @default(autoincrement())
   pin        String   @unique
   courseName String
+  holeCount  Int      @default(18)  // New field
   date       DateTime @default(now())
   players    User[]
   scores     Score[]

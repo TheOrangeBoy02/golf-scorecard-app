@@ -8,12 +8,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method not allowed' })
   }
 
-  const { courseName, playerIds } = req.body
+  const { courseName, holeCount, playerIds } = req.body
 
   try {
     const game = await prisma.game.create({
       data: {
         courseName,
+        holeCount,
         pin: generateGamePin(),
         players: {
           connect: playerIds.map((id: number) => ({ id }))

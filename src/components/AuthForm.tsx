@@ -1,4 +1,4 @@
-// components/AuthForm.tsx
+// src/components/AuthForm.tsx
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 
@@ -27,36 +27,56 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md mx-auto">
       {type === 'signup' && (
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
-          required
-          className="w-full p-2 mb-4 border rounded"
-        />
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Your name"
+            required
+            className="input"
+          />
+        </div>
       )}
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        required
-        className="w-full p-2 mb-4 border rounded"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
-        className="w-full p-2 mb-4 border rounded"
-      />
-      <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">
-        {type === 'login' ? 'Log In' : 'Sign Up'}
-      </button>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          Email
+        </label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="your@email.com"
+          required
+          className="input"
+        />
+      </div>
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          Password
+        </label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+          required
+          className="input"
+        />
+      </div>
+      <div className="flex items-center justify-between">
+        <button type="submit" className="btn btn-primary">
+          {type === 'login' ? 'Log In' : 'Sign Up'}
+        </button>
+      </div>
     </form>
   )
 }

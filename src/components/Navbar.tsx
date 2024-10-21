@@ -1,4 +1,4 @@
-// components/Navbar.tsx
+// src/components/Navbar.tsx
 import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -13,21 +13,25 @@ const Navbar: React.FC = () => {
   }
 
   return (
-    <nav className="bg-blue-500 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-white text-2xl font-bold">
-          Golf Scorecard
-        </Link>
-        <div>
-          <Link href="/dashboard" className="text-white mr-4">
-            Dashboard
-          </Link>
-          <Link href="/leaderboard" className="text-white mr-4">
-            Leaderboard
-          </Link>
-          <button onClick={handleLogout} className="text-white">
-            Logout
-          </button>
+    <nav className="bg-white shadow-md">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <Link href="/" className="flex-shrink-0 flex items-center">
+              <span className="text-2xl font-bold text-primary-600">Golf Scorecard</span>
+            </Link>
+          </div>
+          <div className="flex items-center">
+            <Link href="/dashboard" className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium">
+              Dashboard
+            </Link>
+            <Link href="/leaderboard" className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium">
+              Leaderboard
+            </Link>
+            <button onClick={handleLogout} className="ml-4 btn btn-secondary">
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </nav>
