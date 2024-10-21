@@ -1,7 +1,7 @@
 // src/pages/api/auth/login.ts
 import { NextApiRequest, NextApiResponse } from 'next'
-import prisma from '../../../lib/prisma'
-import { comparePasswords, generateToken } from '../../../lib/utils'
+import prisma from '../../lib/prisma'
+import { comparePasswords, generateToken } from '../../lib/utils'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
