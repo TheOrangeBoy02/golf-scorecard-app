@@ -8,11 +8,12 @@ export interface Score {
   hole: number
   userId: number
   gameId: number
+  createdAt: Date
+  updatedAt: Date
   user?: User
   game?: Game
 }
 
-export interface ScoreWithUserAndGame extends Score {
+export interface ScoreWithUser extends Score {
   user: User
-  game: Game
 }
