@@ -1,21 +1,21 @@
+// src/pages/game/[id].tsx
 import React from 'react'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/layout'
 import Scorecard from '../../components/Scorecard'
 import prisma from '../../lib/prisma'
-import { Game, User, Score } from '@prisma/client'
+import { Game, User, Score } from '../../types'
 
 interface GamePageProps {
   game: Game & {
     players: User[];
-    scores: (Score & {
-      user: User;
-    })[];
-  };
+    scores: Score[];
+  }
 }
 
 export const getServerSideProps: GetServerSideProps<GamePageProps> = async (context) => {
-  const gameId = context.params?.id as string;
+  const gameId = context.params?.id as string
+
   const game = await prisma.game.findUnique({
     where: { id: parseInt(gameId) },
     include: {
@@ -26,18 +26,20 @@ export const getServerSideProps: GetServerSideProps<GamePageProps> = async (cont
         }
       }
     }
-  });
+  })
 
   if (!game) {
     return {
-      notFound: true,
-    };
+      notFound: true
+    }
   }
 
   return {
-    props: { game }
-  };
-};
+    props: {
+      game: JSON.parse(JSON.stringify(game)) // Serialize dates
+    }
+  }
+}
 
 const GamePage: React.FC<GamePageProps> = ({ game }) => {
   return (
@@ -45,10 +47,10 @@ const GamePage: React.FC<GamePageProps> = ({ game }) => {
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold mb-8">Game #{game.id}</h1>
         <p className="text-xl mb-4">Course: {game.courseName}</p>
-        <Scorecard gameId={game.id.toString()} />
+        <Scorecard game={game} />
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default GamePage;
+export default GamePage

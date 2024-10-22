@@ -1,51 +1,80 @@
 // src/pages/dashboard.tsx
 import React from 'react'
 import { GetServerSideProps } from 'next'
-import prisma from '../lib/prisma'
-import { User, Game, Score } from '@prisma/client'
-import GameForm from '../components/GameForm'
+import Layout from '../components/layout'
 import ProfileStats from '../components/ProfileStats'
-
+import GameForm from '../components/GameForm'
+import prisma from '../lib/prisma'
+import { User, Game, Score } from '../types'
 
 interface DashboardPageProps {
-  user: User
-  games: (Game & {
-    scores: Score[];
-  })[]
+  user: (User & {
+    games: (Game & {
+      scores: Score[];
+    })[];
+  }) | null;
 }
 
 export const getServerSideProps: GetServerSideProps<DashboardPageProps> = async (context) => {
-  const user = await prisma.user.findUnique({
-    where: { id: 1 }, // Replace with the actual user ID
-    include: {
-      games: {
-        include: {
-          scores: true
+  try {
+    // TODO: Get the actual user ID from the session
+    const userId = 1
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        games: {
+          include: {
+            scores: true
+          }
+        }
+      }
+    })
+
+    if (!user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
         }
       }
     }
-  })
 
-  return {
-    props: {
-      user: user || null,
-      games: user?.games || []
+    return {
+      props: {
+        user: JSON.parse(JSON.stringify(user)) // Serialize the date objects
+      }
+    }
+  } catch (error) {
+    console.error('Dashboard error:', error)
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
     }
   }
 }
 
-const DashboardPage: React.FC<DashboardPageProps> = ({ user, games }) => {
+const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
   if (!user) {
-    return <div>Loading...</div>
+    return (
+      <Layout>
+        <div>Loading...</div>
+      </Layout>
+    )
   }
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-      <ProfileStats user={user} games={games} />
-      <h2 className="text-2xl font-bold mt-8 mb-4">New Game</h2>
-      <GameForm />
-    </div>
+    <Layout>
+      <div className="container mx-auto px-4">
+        <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
+        <ProfileStats user={user} games={user.games} />
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-4">Create New Game</h2>
+          <GameForm />
+        </div>
+      </div>
+    </Layout>
   )
 }
 
