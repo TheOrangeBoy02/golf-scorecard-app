@@ -1,7 +1,7 @@
 // src/pages/game/join.tsx
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import Layout from '../../components/layout'
+import Layout from '../../layout'
 
 const JoinGamePage: React.FC = () => {
   const [gamePin, setGamePin] = useState('')

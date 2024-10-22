@@ -1,6 +1,6 @@
 import React from 'react'
-import Layout from '../../components/layout'
-import GameForm from '../../components/GameForm'
+import Layout from '../../../layout'
+import GameForm from '../../GameForm'
 
 const NewGamePage: React.FC = () => {
   return (

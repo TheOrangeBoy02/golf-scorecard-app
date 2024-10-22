@@ -1,11 +1,11 @@
 // src/pages/dashboard.tsx
 import React from 'react'
 import { GetServerSideProps } from 'next'
-import Layout from '../components/layout'
-import ProfileStats from '../components/ProfileStats'
-import GameForm from '../components/GameForm'
-import prisma from '../lib/prisma'
-import { User, Game, Score } from '../types'
+import Layout from '../layout'
+import ProfileStats from '../ProfileStats'
+import GameForm from '../GameForm'
+import prisma from '../../lib/prisma'
+import { User, Game, Score } from '../../types'
 
 interface DashboardPageProps {
   user: (User & {
