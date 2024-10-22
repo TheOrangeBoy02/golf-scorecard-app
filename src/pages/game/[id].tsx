@@ -1,10 +1,10 @@
 // src/pages/game/[id].tsx
 import React from 'react'
 import { GetServerSideProps } from 'next'
-import Layout from '../../../layout'
-import Scorecard from '../../Scorecard'
-import prisma from '../../../lib/prisma'
-import { Game, User, Score } from '../../../types'
+import Layout from '../../components/Layout'
+import Scorecard from '../../components/Scorecard'
+import prisma from '../../lib/prisma'
+import { Game, User, Score } from '../../types'
 
 interface GamePageProps {
   game: Game & {
