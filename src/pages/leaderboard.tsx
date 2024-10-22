@@ -1,9 +1,9 @@
 // src/pages/leaderboard.tsx
 import React from 'react'
 import { GetServerSideProps } from 'next'
-import prisma from '../../lib/prisma'
+import prisma from '../lib/prisma'
 import { Game, User } from '@prisma/client'
-import LeaderboardTable from '../LeaderboardTable'
+import LeaderboardTable from '../components/LeaderboardTable'
 
 interface LeaderboardPageProps {
   games: (Game & {

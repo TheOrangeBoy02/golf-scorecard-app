@@ -1,7 +1,7 @@
 // src/pages/profile.tsx
 import React from 'react'
 import { GetServerSideProps } from 'next'
-import Layout from '../layout'
+import Layout from '../Layout'
 import ProfileStats from '../ProfileStats'
 import prisma from '../../lib/prisma'
 import { User, Game, Score } from '@prisma/client'
