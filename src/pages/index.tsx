@@ -19,7 +19,7 @@ const HomePage = () => {
         </SignedIn>
 
         <SignedOut>
-          <div className="flex space-x-6">
+          {/* <div className="flex space-x-6">
             <Link
               href="/sign-in"
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
@@ -32,7 +32,7 @@ const HomePage = () => {
             >
               Sign Up
             </Link>
-          </div>
+          </div> */}
         </SignedOut>
       </div>
     </Layout>
