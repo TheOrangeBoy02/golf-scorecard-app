@@ -1,10 +1,7 @@
 // src/pages/api/webhooks/clerk.ts
 import { WebhookEvent } from "@clerk/nextjs/server"
 import { NextApiRequest, NextApiResponse } from "next"
-// import { Webhook } from 'svix'
 import prisma from "../../../lib/prisma"
-
-const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || ''
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,16 +12,6 @@ export default async function handler(
   }
 
   try {
-    const headerPayload = req.headers;
-    const svixId = headerPayload['svix-id'] as string;
-    const svixTimestamp = headerPayload['svix-timestamp'] as string;
-    const svixSignature = headerPayload['svix-signature'] as string;
-
-    if (!svixId || !svixTimestamp || !svixSignature) {
-      return res.status(400).json({ message: 'Missing svix headers' })
-    }
-
-    const payload = req.body
     const evt = req.body as WebhookEvent
 
     switch (evt.type) {
@@ -60,10 +47,4 @@ export default async function handler(
     console.error('Webhook error:', error)
     return res.status(400).json({ message: 'Webhook error' })
   }
-}
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
 }

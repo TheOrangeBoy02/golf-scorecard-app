@@ -17,6 +17,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { id } = req.query
     const gameId = Number(id)
 
+    const user = await prisma.user.findUnique({
+      where: { clerkId: userId }
+    })
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
     const game = await prisma.game.findUnique({
       where: { id: gameId },
       include: {
@@ -33,8 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ message: 'Game not found' })
     }
 
-    // Check if user is part of the game
-    const isPlayerInGame = game.players.some(player => player.clerkId === userId)
+    // Verify user is part of the game
+    const isPlayerInGame = game.players.some(player => player.id === user.id)
     if (!isPlayerInGame) {
       return res.status(403).json({ message: 'Not authorized to view this game' })
     }

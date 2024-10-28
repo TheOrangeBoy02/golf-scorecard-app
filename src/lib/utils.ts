@@ -1,27 +1,23 @@
 // src/lib/utils.ts
-import { hash, compare } from 'bcrypt'
-import { sign, verify } from 'jsonwebtoken'
-
-export const hashPassword = (password: string): Promise<string> => {
-  return hash(password, 10)
+export const generateGamePin = () => {
+  return Math.random()
+    .toString(36)
+    .substring(2, 8)
+    .toUpperCase();
 }
 
-export const comparePasswords = (password: string, hashedPassword: string): Promise<boolean> => {
-  return compare(password, hashedPassword)
+export const calculateTotalScore = (scores: Array<{ value: number }>) => {
+  return scores.reduce((total, score) => total + score.value, 0);
 }
 
-export const generateToken = (userId: number): string => {
-  return sign({ userId }, process.env.JWT_SECRET!, { expiresIn: '1d' })
+export const formatDate = (date: Date) => {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 }
 
-export const verifyToken = (token: string): { userId: number } | null => {
-  try {
-    return verify(token, process.env.JWT_SECRET!) as { userId: number }
-  } catch {
-    return null
-  }
-}
-
-export const generateGamePin = (): string => {
-  return Math.random().toString(36).substr(2, 6).toUpperCase()
+export const validateHoleScore = (score: number): boolean => {
+  return score >= 1 && score <= 15; // Assuming max score per hole is 15
 }

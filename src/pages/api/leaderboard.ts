@@ -38,18 +38,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return {
           playerId: player.id,
           playerName: player.name,
-          totalScore,
-          holeCount: game.scores
-            .filter(score => score.userId === player.id)
-            .length
+          totalScore
         }
-      })
+      }).sort((a, b) => a.totalScore - b.totalScore)
 
       return {
         gameId: game.id,
         courseName: game.courseName,
         date: game.date,
-        playerScores: playerScores.sort((a, b) => a.totalScore - b.totalScore)
+        playerScores
       }
     })
 

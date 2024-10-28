@@ -1,8 +1,7 @@
-// src/pages/api/game/create.ts
+// src/pages/api/game/join.ts
 import { getAuth } from "@clerk/nextjs/server"
 import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '../../../lib/prisma'
-import { generateGamePin } from '../../../lib/utils'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -15,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { courseName, holeCount } = req.body
+    const { pin } = req.body
 
     const user = await prisma.user.findUnique({
       where: { clerkId: userId }
@@ -25,11 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ message: 'User not found' })
     }
 
-    const game = await prisma.game.create({
+    const game = await prisma.game.update({
+      where: { pin },
       data: {
-        courseName,
-        holeCount: holeCount || 18,
-        pin: generateGamePin(),
         players: {
           connect: { id: user.id }
         }
@@ -39,9 +36,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     })
 
-    res.status(201).json(game)
+    res.status(200).json(game)
   } catch (error) {
-    console.error('Create game error:', error)
+    console.error('Join game error:', error)
     res.status(500).json({ message: 'Internal server error' })
   }
 }
